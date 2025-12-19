@@ -1,5 +1,7 @@
+import FetchContainer from "@/fetcher-presenter/fetch-container";
+
 export default function Dashboard() {
     return(
-        <>Dashbboard Page</>
+        <><FetchContainer mode="characters"/></>
     )
 }

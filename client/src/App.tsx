@@ -8,6 +8,7 @@ import "aos/dist/aos.css";
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './pages/dashboard/Dashboard';
+import DashboardLayout from './layouts/dashboard';
 
 const App = () => {
   useEffect(() => {
@@ -28,7 +29,9 @@ const App = () => {
           <Route path="/reset" element={<Reset />} />
           {/* AUTH ROUTES */}
           {/* DASHBOARD ROUTES */}
-            <Route path='/dashboard' element={<Dashboard/>}/>
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
           {/* DASHBOARD ROUTES */}
         </Routes>
       </Router>
