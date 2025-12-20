@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardLayout from './layouts/dashboard';
+import Location from './pages/dashboard/Location';
 
 const App = () => {
   useEffect(() => {
@@ -31,6 +32,7 @@ const App = () => {
           {/* DASHBOARD ROUTES */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/locations" element={<Location />} />
           </Route>
           {/* DASHBOARD ROUTES */}
         </Routes>

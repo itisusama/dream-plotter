@@ -1,6 +1,6 @@
 import { Outlet, Navigate } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
-import { Navbar } from "@/components/navbar";
+import Navbar from "@/components/navbar";
 
 export default function DashboardLayout() {
   const { user, hydrated } = useUserStore();
