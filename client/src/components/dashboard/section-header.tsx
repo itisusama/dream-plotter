@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardTitle } from "../ui/card";
 import { Icon } from "@/lib/icons"
 
-export default function SectionHeader({heading, count}:{heading: string, count: number}) {
+export default function SectionHeader({heading, description = "Click to move to customization area", count}:{heading: string, description?: string, count: number}) {
   return (
     <CardHeader className="pb-2">
       <CardTitle className="flex items-center gap-2">
@@ -13,7 +13,7 @@ export default function SectionHeader({heading, count}:{heading: string, count: 
         </Badge>
       </CardTitle>
       <p className="text-sm text-muted-foreground">
-        Click to move to customization area
+        {description}
       </p>
     </CardHeader>
   );

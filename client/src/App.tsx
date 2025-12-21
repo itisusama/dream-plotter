@@ -11,6 +11,7 @@ import Dashboard from './pages/dashboard/Dashboard';
 import DashboardLayout from './layouts/dashboard';
 import Location from './pages/dashboard/Location';
 import Customization from './pages/dashboard/Customization';
+import Families from './pages/dashboard/Families';
 
 const App = () => {
   useEffect(() => {
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/locations" element={<Location />} />
             <Route path="/customization" element={<Customization />} />
+            <Route path="/families" element={<Families />} />
           </Route>
           {/* DASHBOARD ROUTES */}
         </Routes>

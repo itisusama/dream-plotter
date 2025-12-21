@@ -15,6 +15,7 @@ const navLinks = [
   { to: "/dashboard", label: "Characters", icon: Users },
   { to: "/locations", label: "Locations", icon: Globe },
   { to: "/customization", label: "Customization", icon: Settings },
+  { to: "/families", label: "Families", icon: Settings },
 ];
 
 export default function Navbar() {

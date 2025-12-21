@@ -9,6 +9,9 @@ import {
   ArrowLeft,
   Pencil,
   Building2,
+  Layout,
+  GripVertical,
+  X, Home, List, Plus, Check, Copy
 } from "lucide-react";
 
 export const Icon = {
@@ -22,4 +25,7 @@ export const Icon = {
   ArrowLeft,
   Pencil,
   Building2,
+  Layout,
+  GripVertical,
+  X, Home, List, Plus, Check, Copy
 };
