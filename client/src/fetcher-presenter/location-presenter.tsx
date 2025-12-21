@@ -3,6 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { MapPin, X, Globe, Navigation, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useSelectionStore } from "@/store/useSelectionStore";
 
 export default function LocationPresenter({
   data,
@@ -11,33 +12,13 @@ export default function LocationPresenter({
   data: any[];
   loading: boolean;
 }) {
-  const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
-
-  // Toggle location selection
-  const handleSelect = (location: any) => {
-    setSelectedLocations((prev) => {
-      const isAlreadySelected = prev.some((c) => c.id === location.id);
-      if (isAlreadySelected) {
-        return prev.filter((c) => c.id !== location.id);
-      }
-      return [...prev, location];
-    });
-  };
-
-  // Check if location is selected
-  const isSelected = (locationId: number) => {
-    return selectedLocations.some((c) => c.id === locationId);
-  };
-
-  // Remove from selection box
-  const removeFromSelection = (locationId: number) => {
-    setSelectedLocations((prev) => prev.filter((c) => c.id !== locationId));
-  };
-
-  // Clear all selections
-  const clearAll = () => {
-    setSelectedLocations([]);
-  };
+   const {
+    selectedLocations,
+    toggleLocation,
+    removeLocation,
+    clearLocations,
+    isLocationSelected,
+  } = useSelectionStore();
 
   return (
     <>
@@ -59,7 +40,7 @@ export default function LocationPresenter({
                   Selected Locations ({selectedLocations.length})
                 </h2>
                 <button
-                  onClick={clearAll}
+                  onClick={clearLocations}
                   className="text-sm text-emerald-600 hover:text-emerald-800 hover:underline"
                 >
                   Clear all
@@ -75,7 +56,7 @@ export default function LocationPresenter({
                     {location.address}, {location.country}
                     <X
                       className="w-4 h-4 cursor-pointer hover:text-emerald-900 transition-colors"
-                      onClick={() => removeFromSelection(location.id)}
+                      onClick={() => removeLocation(location.id)}
                     />
                   </span>
                 ))}
@@ -86,11 +67,11 @@ export default function LocationPresenter({
           {/* Location Grid */}
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             {data.map((location) => {
-              const selected = isSelected(location.id);
+              const selected = isLocationSelected(location.id);
               return (
                 <Card
                   key={location.id}
-                  onClick={() => handleSelect(location)}
+                  onClick={() => toggleLocation(location)}
                   className={`cursor-pointer transition-all hover:shadow-md border-l-4 ${
                     selected
                       ? "ring-2 ring-offset-2 ring-emerald-500 border-l-emerald-500 bg-emerald-50/50"
@@ -102,7 +83,7 @@ export default function LocationPresenter({
                       {/* Checkbox */}
                       <Checkbox
                         checked={selected}
-                        onCheckedChange={() => handleSelect(location)}
+                        onCheckedChange={() => toggleLocation(location)}
                         onClick={(e) => e.stopPropagation()}
                         className="mt-1 border-emerald-500 data-[state=checked]:bg-emerald-500"
                       />
@@ -132,7 +113,7 @@ export default function LocationPresenter({
                   <CardContent>
                     {/* Address */}
                     <div className="flex items-start gap-2 text-sm">
-                      <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                      <Building2 className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                       <p className="text-muted-foreground leading-relaxed">
                         {location.address}
                       </p>

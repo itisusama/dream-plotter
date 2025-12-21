@@ -57,7 +57,7 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetContent side="right" className="w-75 sm:w-100">
                 <SheetHeader>
                   <SheetTitle className="flex items-center gap-2">
                     <img src="/logo.png" alt="logo" className="w-6 h-6" />

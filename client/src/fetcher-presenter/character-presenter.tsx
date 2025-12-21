@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Mars, Venus, X, Users } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { useSelectionStore } from "@/store/useSelectionStore";
 
 export default function CharacterPresenter({
   data,
@@ -11,33 +10,13 @@ export default function CharacterPresenter({
   data: any[];
   loading: boolean;
 }) {
-  const [selectedCharacters, setSelectedCharacters] = useState<any[]>([]);
-
-  // Toggle character selection
-  const handleSelect = (character: any) => {
-    setSelectedCharacters((prev) => {
-      const isAlreadySelected = prev.some((c) => c.id === character.id);
-      if (isAlreadySelected) {
-        return prev.filter((c) => c.id !== character.id);
-      }
-      return [...prev, character];
-    });
-  };
-
-  // Check if character is selected
-  const isSelected = (characterId: number) => {
-    return selectedCharacters.some((c) => c.id === characterId);
-  };
-
-  // Remove from selection box
-  const removeFromSelection = (characterId: number) => {
-    setSelectedCharacters((prev) => prev.filter((c) => c.id !== characterId));
-  };
-
-  // Clear all selections
-  const clearAll = () => {
-    setSelectedCharacters([]);
-  };
+  const {
+    selectedCharacters,
+    toggleCharacter,
+    removeCharacter,
+    clearCharacters,
+    isCharacterSelected,
+  } = useSelectionStore();
 
   return (
     <>
@@ -59,7 +38,7 @@ export default function CharacterPresenter({
                   Selected Characters ({selectedCharacters.length})
                 </h2>
                 <button
-                  onClick={clearAll}
+                  onClick={clearCharacters}
                   className="text-sm text-violet-600 hover:text-violet-800 hover:underline"
                 >
                   Clear all
@@ -83,7 +62,7 @@ export default function CharacterPresenter({
                     {character.firstName} {character.lastName}
                     <X
                       className="w-4 h-4 cursor-pointer hover:opacity-70 transition-opacity"
-                      onClick={() => removeFromSelection(character.id)}
+                      onClick={() => removeCharacter(character.id)}
                     />
                   </span>
                 ))}
@@ -94,13 +73,13 @@ export default function CharacterPresenter({
           {/* Character Grid */}
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             {data.map((character) => {
-              const selected = isSelected(character.id);
+              const selected = isCharacterSelected(character.id);
               const isMale = character.gender === "Male";
 
               return (
                 <Card
                   key={character.id}
-                  onClick={() => handleSelect(character)}
+                  onClick={() => toggleCharacter(character)}
                   className={`cursor-pointer transition-all hover:shadow-md border-l-4 ${
                     selected
                       ? isMale
@@ -116,7 +95,7 @@ export default function CharacterPresenter({
                       {/* Checkbox */}
                       <Checkbox
                         checked={selected}
-                        onCheckedChange={() => handleSelect(character)}
+                        onCheckedChange={() => toggleCharacter(character)}
                         onClick={(e) => e.stopPropagation()}
                         className={`mt-1 ${
                           isMale
@@ -143,18 +122,6 @@ export default function CharacterPresenter({
                           <Venus className="h-4 w-4" />
                         )}
                       </div>
-
-                      {/* Gender Badge */}
-                      <Badge
-                        variant="secondary"
-                        className={`ml-auto ${
-                          isMale
-                            ? "bg-blue-100 text-blue-700"
-                            : "bg-pink-100 text-pink-700"
-                        }`}
-                      >
-                        {character.gender}
-                      </Badge>
                     </div>
                   </CardHeader>
 
