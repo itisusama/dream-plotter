@@ -1,11 +1,10 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { ui } from "@/imports/ui";
 import { Icon } from "@/lib/icons";
-import useCustomization from "@/hooks/useCustomization";
+import { hook } from "@/imports/hook";
 import { dashboardComponent } from "@/components";
 
 export default function Customization() {
-  const customization = useCustomization();
+  const customization = hook.useCustomization();
   const empty = "Select characters and locations from their respective pages to customize them here.";
   return (
     <dashboardComponent.CustomizationSlot
@@ -18,13 +17,13 @@ export default function Customization() {
               Customization
             </h1>
             {customization.hasAnything && (
-              <Button
+              <ui.Button
                 variant="destructive"
                 size="sm"
                 onClick={customization.clearAll}>
                 <Icon.Trash2 className="h-4 w-4 mr-2" />
                 Clear All
-              </Button>
+              </ui.Button>
             )}
           </div>
           {/* Empty State */}
@@ -36,17 +35,17 @@ export default function Customization() {
       customizationArea={
         <>
           <div className="lg:col-span-2 space-y-4">
-            <Card className="border-2 border-orange-200 bg-orange-50/50">
-              <CardHeader className="pb-2">
-                <CardTitle className="flex items-center gap-2 text-orange-800">
+            <ui.Card className="border-2 border-orange-200 bg-orange-50/50">
+              <ui.CardHeader className="pb-2">
+                <ui.CardTitle className="flex items-center gap-2 text-orange-800">
                   <Icon.Pencil className="h-5 w-5" />
                   Customization Area
-                </CardTitle>
+                </ui.CardTitle>
                 <p className="text-sm text-orange-600">
                   Click on selected items to edit them here
                 </p>
-              </CardHeader>
-              <CardContent className="space-y-4">
+              </ui.CardHeader>
+              <ui.CardContent className="space-y-4">
                 {/* Empty Customization State */}
                 {!customization.hasCustomizing && (
                   <div className="flex flex-col items-center justify-center py-8 text-center border-2 border-dashed border-orange-200 rounded-lg">
@@ -58,42 +57,42 @@ export default function Customization() {
                 )}
 
                 <dashboardComponent.MapCustomization />
-              </CardContent>
-            </Card>
+              </ui.CardContent>
+            </ui.Card>
           </div>
         </>
       }
       mapArea={
         <>
           {/* Selected Characters */}
-          <Card>
+          <ui.Card>
             <dashboardComponent.SectionHeader
               heading="Selected Characters"
               count={customization.selectedCharacters.length}
             />
-            <CardContent>
+            <ui.CardContent>
               {customization.selectedCharacters.length === 0 ? (
                 <dashboardComponent.EmptyBlock description="No characters selected" />
               ) : (
                 <dashboardComponent.MapCharacters />
               )}
-            </CardContent>
-          </Card>
+            </ui.CardContent>
+          </ui.Card>
 
           {/* Selected Locations */}
-          <Card>
+          <ui.Card>
             <dashboardComponent.SectionHeader
               heading="Selected Characters"
               count={customization.selectedLocations.length}
             />
-            <CardContent>
+            <ui.CardContent>
               {customization.selectedLocations.length === 0 ? (
                 <dashboardComponent.EmptyBlock description="No location selected" />
               ) : (
                 <dashboardComponent.MapLocations />
               )}
-            </CardContent>
-          </Card>
+            </ui.CardContent>
+          </ui.Card>
         </>
       }
     />

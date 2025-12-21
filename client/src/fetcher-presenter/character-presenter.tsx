@@ -1,6 +1,5 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Mars, Venus, X, Users } from "lucide-react";
+import { ui } from "@/imports/ui";
+import { Icon } from "@/lib/icons";
 import { useSelectionStore } from "@/store/useSelectionStore";
 
 export default function CharacterPresenter({
@@ -10,42 +9,36 @@ export default function CharacterPresenter({
   data: any[];
   loading: boolean;
 }) {
-  const {
-    selectedCharacters,
-    toggleCharacter,
-    removeCharacter,
-    clearCharacters,
-    isCharacterSelected,
-  } = useSelectionStore();
+  const selection = useSelectionStore();
 
   return (
     <>
       {loading ? (
         <div className="flex items-center justify-center p-8">
           <div className="flex items-center gap-2 text-muted-foreground">
-            <Users className="h-5 w-5 animate-pulse" />
+            <Icon.Users className="h-5 w-5 animate-pulse" />
             <p>Loading characters...</p>
           </div>
         </div>
       ) : (
         <>
           {/* Selected Characters Box */}
-          {selectedCharacters.length > 0 && (
+          {selection.selectedCharacters.length > 0 && (
             <div className="m-4 p-4 border-2 border-dashed border-violet-300 rounded-lg bg-violet-50">
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold flex items-center gap-2 text-violet-800">
-                  <Users className="h-5 w-5" />
-                  Selected Characters ({selectedCharacters.length})
+                  <Icon.Users className="h-5 w-5" />
+                  Selected Characters ({selection.selectedCharacters.length})
                 </h2>
                 <button
-                  onClick={clearCharacters}
+                  onClick={selection.clearCharacters}
                   className="text-sm text-violet-600 hover:text-violet-800 hover:underline"
                 >
                   Clear all
                 </button>
               </div>
               <div className="flex flex-wrap gap-2">
-                {selectedCharacters.map((character) => (
+                {selection.selectedCharacters.map((character) => (
                   <span
                     key={character.id}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border ${
@@ -55,14 +48,14 @@ export default function CharacterPresenter({
                     }`}
                   >
                     {character.gender === "Male" ? (
-                      <Mars className="w-3 h-3" />
+                      <Icon.Mars className="w-3 h-3" />
                     ) : (
-                      <Venus className="w-3 h-3" />
+                      <Icon.Venus className="w-3 h-3" />
                     )}
                     {character.firstName} {character.lastName}
-                    <X
+                    <Icon.X
                       className="w-4 h-4 cursor-pointer hover:opacity-70 transition-opacity"
-                      onClick={() => removeCharacter(character.id)}
+                      onClick={() => selection.removeCharacter(character.id)}
                     />
                   </span>
                 ))}
@@ -73,13 +66,13 @@ export default function CharacterPresenter({
           {/* Character Grid */}
           <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
             {data.map((character) => {
-              const selected = isCharacterSelected(character.id);
+              const selected = selection.isCharacterSelected(character.id);
               const isMale = character.gender === "Male";
 
               return (
-                <Card
+                <ui.Card
                   key={character.id}
-                  onClick={() => toggleCharacter(character)}
+                  onClick={() => selection.toggleCharacter(character)}
                   className={`cursor-pointer transition-all hover:shadow-md border-l-4 ${
                     selected
                       ? isMale
@@ -90,12 +83,12 @@ export default function CharacterPresenter({
                         : "border-l-pink-300 hover:border-l-pink-500"
                   }`}
                 >
-                  <CardHeader className="pb-2">
+                  <ui.CardHeader className="pb-2">
                     <div className="flex items-start gap-3">
                       {/* Checkbox */}
-                      <Checkbox
+                      <ui.Checkbox
                         checked={selected}
-                        onCheckedChange={() => toggleCharacter(character)}
+                        onCheckedChange={() => selection.toggleCharacter(character)}
                         onClick={(e) => e.stopPropagation()}
                         className={`mt-1 ${
                           isMale
@@ -117,23 +110,23 @@ export default function CharacterPresenter({
                         }`}
                       >
                         {isMale ? (
-                          <Mars className="h-4 w-4" />
+                          <Icon.Mars className="h-4 w-4" />
                         ) : (
-                          <Venus className="h-4 w-4" />
+                          <Icon.Venus className="h-4 w-4" />
                         )}
                       </div>
                     </div>
-                  </CardHeader>
+                  </ui.CardHeader>
 
-                  <CardContent>
+                  <ui.CardContent>
                     {/* Name */}
                     <div className="flex items-center gap-2">
                       <p className="font-medium text-foreground">
                         {character.firstName} {character.lastName}
                       </p>
                     </div>
-                  </CardContent>
-                </Card>
+                  </ui.CardContent>
+                </ui.Card>
               );
             })}
           </section>
@@ -141,7 +134,7 @@ export default function CharacterPresenter({
           {/* Empty State */}
           {data.length === 0 && (
             <div className="flex flex-col items-center justify-center p-12 text-center">
-              <Users className="h-12 w-12 text-muted-foreground mb-4" />
+              <Icon.Users className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-semibold">No characters found</h3>
               <p className="text-muted-foreground">
                 Try adjusting your search or filters

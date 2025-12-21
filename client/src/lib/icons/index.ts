@@ -11,7 +11,7 @@ import {
   Building2,
   Layout,
   GripVertical,
-  X, Home, List, Plus, Check, Copy
+  X, Home, List, Plus, Check, Copy, ArrowRight
 } from "lucide-react";
 
 export const Icon = {
@@ -27,5 +27,5 @@ export const Icon = {
   Building2,
   Layout,
   GripVertical,
-  X, Home, List, Plus, Check, Copy
+  X, Home, List, Plus, Check, Copy, ArrowRight
 };

@@ -1,7 +1,7 @@
 import MainHeading from "@/components/shared/main-heading";
 import { Button } from "@/components/ui/button";
 import { useUserStore } from "@/store/useUserStore";
-import { ArrowRight } from "lucide-react";
+import { Icon } from "@/lib/icons";
 import { Link } from "react-router-dom";
 
 export default function Landing() {
@@ -24,7 +24,7 @@ export default function Landing() {
           <Link to="/dashboard">
             <Button variant="secondary" data-aos="fade-down">
               Get to Dashboard
-              <ArrowRight />
+              <Icon.ArrowRight />
             </Button>
           </Link>
         </>
@@ -33,7 +33,7 @@ export default function Landing() {
           <Link to="/login">
             <Button variant="secondary" data-aos="fade-down">
               Get Started
-              <ArrowRight />
+              <Icon.ArrowRight />
             </Button>
           </Link>
         </>

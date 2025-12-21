@@ -198,14 +198,7 @@ export const useSelectionStore = create<SelectionState>((set, get) => ({
         (l) => l.id !== locationId
       ),
     })),
-
-    removeFromCustomizingCharacters: (characterId: number) =>
-  set((state) => ({
-    customizingCharacters: state.customizingCharacters.filter(
-      (c) => c.id !== characterId
-    ),
-  })),
-
+    
   // Clear All
   clearAll: () =>
     set({

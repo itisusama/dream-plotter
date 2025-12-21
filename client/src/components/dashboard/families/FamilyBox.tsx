@@ -1,4 +1,3 @@
-// src/components/families/FamilyBox.tsx
 import { useDroppable } from "@dnd-kit/core";
 import { useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
@@ -13,26 +12,7 @@ import {
 } from "@/components/ui/tooltip";
 import { Icon } from "@/lib/icons";
 import { useFamilyStore } from "@/store/useFamilyStore";
-
-interface Character {
-  id: number;
-  firstName: string;
-  lastName: string;
-  gender: string;
-}
-
-interface Location {
-  id: number;
-  country: string;
-  address: string;
-}
-
-interface Family {
-  id: string;
-  name: string;
-  characters: Character[];
-  locations: Location[];
-}
+import type { Family } from "@/types";
 
 export default function FamilyBox({ family }: { family: Family }) {
   const [isEditing, setIsEditing] = useState(false);

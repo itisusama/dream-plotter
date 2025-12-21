@@ -8,33 +8,15 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import useCustomization from "@/hooks/useCustomization";
-import { useFamilyStore } from "@/store/useFamilyStore";
+import { ui } from "@/imports/ui";
 import { Icon } from "@/lib/icons";
-import DraggableCharacter from "@/components/families/DraggableCharacter";
-import DraggableLocation from "@/components/families/DraggableLocation";
-import FamilyBox from "@/components/families/FamilyBox";
-import EmptyBlock from "@/components/dashboard/empty-block";
-
-interface Character {
-  id: number;
-  firstName: string;
-  lastName: string;
-  gender: string;
-}
-
-interface Location {
-  id: number;
-  country: string;
-  address: string;
-}
+import { useFamilyStore } from "@/store/useFamilyStore";
+import { hook } from "@/imports/hook";
+import { dashboardComponent } from "@/components";
+import type { Character, Location } from "@/types";
 
 export default function Families() {
-  const customization = useCustomization();
+  const customization = hook.useCustomization();
   const familyStore = useFamilyStore();
 
   const [newFamilyName, setNewFamilyName] = useState("");
@@ -106,26 +88,23 @@ export default function Families() {
           <h1 className="text-2xl font-bold">Families</h1>
         </div>
 
-        {/* Main Grid - 20% Sidebar | 80% Main */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 h-[calc(100vh-120px)]">
-          {/* Sidebar - 20% (1/5) */}
           <div className="lg:col-span-1 space-y-4 overflow-y-auto">
-            <Card className="border-2 border-dashed">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm flex items-center gap-2">
+            <ui.Card className="border-2 border-dashed">
+              <ui.CardHeader className="pb-2">
+                <ui.CardTitle className="text-sm flex items-center gap-2">
                   <Icon.List className="h-4 w-4" />
                   Items to Work With
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Characters List */}
+                </ui.CardTitle>
+              </ui.CardHeader>
+              <ui.CardContent className="space-y-4">
                 <div>
                   <div className="flex items-center gap-1 mb-2">
                     <Icon.Users className="h-3 w-3 text-violet-600" />
                     <span className="text-xs font-medium">Characters</span>
-                    <Badge variant="secondary" className="h-4 text-xs px-1">
+                    <ui.Badge variant="secondary" className="h-4 text-xs px-1">
                       {customization.customizingCharacters.length}
-                    </Badge>
+                    </ui.Badge>
                   </div>
 
                   {!hasCharacters ? (
@@ -135,7 +114,7 @@ export default function Families() {
                   ) : (
                     <div className="space-y-2">
                       {customization.customizingCharacters.map((character) => (
-                        <DraggableCharacter
+                        <dashboardComponent.DraggableCharacter
                           key={character.id}
                           character={character}
                         />
@@ -149,9 +128,9 @@ export default function Families() {
                   <div className="flex items-center gap-1 mb-2">
                     <Icon.MapPin className="h-3 w-3 text-emerald-600" />
                     <span className="text-xs font-medium">Locations</span>
-                    <Badge variant="secondary" className="h-4 text-xs px-1">
+                    <ui.Badge variant="secondary" className="h-4 text-xs px-1">
                       {customization.customizingLocations.length}
-                    </Badge>
+                    </ui.Badge>
                   </div>
 
                   {!hasLocations ? (
@@ -161,7 +140,7 @@ export default function Families() {
                   ) : (
                     <div className="space-y-2">
                       {customization.customizingLocations.map((location) => (
-                        <DraggableLocation
+                        <dashboardComponent.DraggableLocation
                           key={location.id}
                           location={location}
                         />
@@ -169,8 +148,8 @@ export default function Families() {
                     </div>
                   )}
                 </div>
-              </CardContent>
-            </Card>
+              </ui.CardContent>
+            </ui.Card>
 
             {/* Hint */}
             <div className="p-3 rounded-lg bg-muted/50 text-xs text-muted-foreground">
@@ -182,37 +161,36 @@ export default function Families() {
             </div>
           </div>
 
-          {/* Main Area - 80% (4/5) */}
           <div className="lg:col-span-4 space-y-4 overflow-y-auto">
             {/* Create Family */}
-            <Card>
-              <CardContent className="pt-4">
+            <ui.Card>
+              <ui.CardContent className="pt-4">
                 <div className="flex items-center gap-2">
-                  <Input
+                  <ui.Input
                     placeholder="Enter family name..."
                     value={newFamilyName}
                     onChange={(e) => setNewFamilyName(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleCreateFamily()}
                     className="flex-1"
                   />
-                  <Button onClick={handleCreateFamily} disabled={!newFamilyName.trim()}>
+                  <ui.Button onClick={handleCreateFamily} disabled={!newFamilyName.trim()}>
                     <Icon.Plus className="h-4 w-4 mr-2" />
                     Create Family
-                  </Button>
+                  </ui.Button>
                 </div>
-              </CardContent>
-            </Card>
+              </ui.CardContent>
+            </ui.Card>
 
             {/* Families Grid */}
             {!hasFamilies ? (
-              <EmptyBlock
+              <dashboardComponent.EmptyBlock
                 heading="No families created"
                 description="Create a family above and drag characters and locations into it."
               />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 {familyStore.families.map((family) => (
-                  <FamilyBox key={family.id} family={family} />
+                  <dashboardComponent.FamilyBox key={family.id} family={family} />
                 ))}
               </div>
             )}
