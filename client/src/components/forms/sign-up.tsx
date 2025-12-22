@@ -87,7 +87,7 @@ export default function SignupForm() {
                     </div>
                 </div>
 
-                <div className="bg-muted rounded-(--radius) border p-3">
+                <div className="bg-muted rounded-lg border p-3">
                     <p className="text-accent-foreground text-center text-sm">
                         Have an account ?
                         <Button
