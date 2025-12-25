@@ -1,7 +1,7 @@
 import { ui } from "@/imports/ui";
 import { MapPin, X, Globe, Navigation, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { useSelectionStore } from "@/store/useSelectionStore";
+import { hook } from "@/imports/hook";
 
 export default function LocationPresenter({
   data,
@@ -10,7 +10,7 @@ export default function LocationPresenter({
   data: any[];
   loading: boolean;
 }) {
-   const selection = useSelectionStore();
+   const selection = hook.useSelectionStore();
 
   return (
     <>

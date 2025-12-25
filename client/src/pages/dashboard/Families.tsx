@@ -10,14 +10,13 @@ import {
 } from "@dnd-kit/core";
 import { ui } from "@/imports/ui";
 import { Icon } from "@/lib/icons";
-import { useFamilyStore } from "@/store/useFamilyStore";
 import { hook } from "@/imports/hook";
 import { dashboardComponent } from "@/components";
 import type { Character, Location } from "@/types";
 
 export default function Families() {
   const customization = hook.useCustomization();
-  const familyStore = useFamilyStore();
+  const familyStore = hook.useFamilyStore();
 
   const [newFamilyName, setNewFamilyName] = useState("");
   const [activeItem, setActiveItem] = useState<{

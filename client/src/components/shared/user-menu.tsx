@@ -1,10 +1,16 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/store/useUserStore";
-import { ChevronDown } from "lucide-react";
+import { ui } from "@/imports/ui";
 
 export default function UserMenu() {
+  const navigate = useNavigate();
   const user = useUserStore((state) => state.user);
+  const logout = useUserStore((state) => state.logout);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   const initials = user
     ? user.fullName
@@ -15,24 +21,29 @@ export default function UserMenu() {
     : "U";
 
   return (
-    <div className="flex items-center gap-3 px-6">
-    <Avatar className="cursor-pointer">
-          <AvatarFallback className="bg-primary text-white">
+    <div className="flex items-center gap-3">
+    <ui.DropdownMenu>
+      <ui.DropdownMenuTrigger className="outline-none">
+        <ui.Avatar className="cursor-pointer">
+          <ui.AvatarFallback className="bg-primary text-white">
             {initials}
-          </AvatarFallback>
-    </Avatar>
-          <h3>{user?.fullName || "User"}</h3>
-    <DropdownMenu>
-      <DropdownMenuTrigger className="outline-none">
-        <ChevronDown/>
-      </DropdownMenuTrigger>
+          </ui.AvatarFallback>
+        </ui.Avatar>
+      </ui.DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-fit">
-        <DropdownMenuLabel className="font-medium">
+      <ui.DropdownMenuContent align="end" className="w-fit">
+        <ui.DropdownMenuLabel className="font-medium">
+          {user?.fullName || "User"}
+        </ui.DropdownMenuLabel>
+        <ui.DropdownMenuLabel className="font-medium">
           {user?.email}
-        </DropdownMenuLabel>
-     </DropdownMenuContent>
-    </DropdownMenu>
+        </ui.DropdownMenuLabel>
+      
+        <ui.DropdownMenuItem onClick={handleLogout} className="text-red-600">
+          Logout
+        </ui.DropdownMenuItem>
+      </ui.DropdownMenuContent>
+    </ui.DropdownMenu>
     </div>
   );
 }

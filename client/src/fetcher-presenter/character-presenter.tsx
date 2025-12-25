@@ -1,6 +1,6 @@
 import { ui } from "@/imports/ui";
 import { Icon } from "@/lib/icons";
-import { useSelectionStore } from "@/store/useSelectionStore";
+import { hook } from "@/imports/hook";
 
 export default function CharacterPresenter({
   data,
@@ -9,7 +9,7 @@ export default function CharacterPresenter({
   data: any[];
   loading: boolean;
 }) {
-  const selection = useSelectionStore();
+  const selection = hook.useSelectionStore();
 
   return (
     <>
