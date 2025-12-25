@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Landing from './pages/Landing';
 import Login from './pages/auth/Login';
@@ -5,7 +6,6 @@ import Register from './pages/auth/Register';
 import Reset from './pages/auth/Reset';
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
 import Dashboard from './pages/dashboard/Dashboard';
 import DashboardLayout from './layouts/dashboard';

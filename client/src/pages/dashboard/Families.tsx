@@ -1,84 +1,22 @@
-import { useState } from "react";
-import {
-  DndContext,
-  type DragEndEvent,
-  DragOverlay,
-  type DragStartEvent,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
+import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { ui } from "@/imports/ui";
 import { Icon } from "@/lib/icons";
-import { hook } from "@/imports/hook";
 import { dashboardComponent } from "@/components";
 import type { Character, Location } from "@/types";
+import { hook } from "@/imports/hook";
 
 export default function Families() {
-  const customization = hook.useCustomization();
-  const familyStore = hook.useFamilyStore();
-
-  const [newFamilyName, setNewFamilyName] = useState("");
-  const [activeItem, setActiveItem] = useState<{
-    type: "character" | "location";
-    data: Character | Location;
-  } | null>(null);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    })
-  );
-
-  const handleDragStart = (event: DragStartEvent) => {
-    const { active } = event;
-    const { type, character, location } = active.data.current as any;
-
-    if (type === "character") {
-      setActiveItem({ type: "character", data: character });
-    } else if (type === "location") {
-      setActiveItem({ type: "location", data: location });
-    }
-  };
-
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-
-    if (over && over.data.current?.type === "family") {
-      const familyId = over.data.current.familyId;
-      const activeData = active.data.current as any;
-
-      if (activeData.type === "character") {
-        // Add character to family and REMOVE from customizing list
-        familyStore.addCharacterToFamily(familyId, activeData.character);
-        customization.removeCustomizingCharacter(activeData.character.id);
-      } else if (activeData.type === "location") {
-        // Add location to family but KEEP in customizing list
-        familyStore.addLocationToFamily(familyId, activeData.location);
-      }
-    }
-
-    setActiveItem(null);
-  };
-
-  const handleCreateFamily = () => {
-    if (newFamilyName.trim()) {
-      familyStore.createFamily(newFamilyName.trim());
-      setNewFamilyName("");
-    }
-  };
-
-  const hasCharacters = customization.customizingCharacters.length > 0;
-  const hasLocations = customization.customizingLocations.length > 0;
-  const hasFamilies = familyStore.families.length > 0;
+  const family = hook.useFamily();
+  const l = family.customization.customizingLocations;
+  const c = family.customization.customizingCharacters;
+  const d = dashboardComponent;
+  const f = family.familyStore.families
 
   return (
     <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      sensors={family.sensors}
+      onDragStart={family.handleDragStart}
+      onDragEnd={family.handleDragEnd}
     >
       <div className="p-4 h-full">
         {/* Header */}
@@ -102,18 +40,18 @@ export default function Families() {
                     <Icon.Users className="h-3 w-3 text-violet-600" />
                     <span className="text-xs font-medium">Characters</span>
                     <ui.Badge variant="secondary" className="h-4 text-xs px-1">
-                      {customization.customizingCharacters.length}
+                      {c.length}
                     </ui.Badge>
                   </div>
 
-                  {!hasCharacters ? (
+                  {!family.hasCharacters ? (
                     <p className="text-xs text-muted-foreground text-center py-2">
                       No characters available
                     </p>
                   ) : (
                     <div className="space-y-2">
-                      {customization.customizingCharacters.map((character) => (
-                        <dashboardComponent.DraggableCharacter
+                      {c.map((character) => (
+                        <d.DraggableCharacter
                           key={character.id}
                           character={character}
                         />
@@ -128,18 +66,18 @@ export default function Families() {
                     <Icon.MapPin className="h-3 w-3 text-emerald-600" />
                     <span className="text-xs font-medium">Locations</span>
                     <ui.Badge variant="secondary" className="h-4 text-xs px-1">
-                      {customization.customizingLocations.length}
+                      {l.length}
                     </ui.Badge>
                   </div>
 
-                  {!hasLocations ? (
+                  {!family.hasLocations ? (
                     <p className="text-xs text-muted-foreground text-center py-2">
                       No locations available
                     </p>
                   ) : (
                     <div className="space-y-2">
-                      {customization.customizingLocations.map((location) => (
-                        <dashboardComponent.DraggableLocation
+                      {l.map((location) => (
+                        <d.DraggableLocation
                           key={location.id}
                           location={location}
                         />
@@ -167,12 +105,12 @@ export default function Families() {
                 <div className="flex items-center gap-2">
                   <ui.Input
                     placeholder="Enter family name..."
-                    value={newFamilyName}
-                    onChange={(e) => setNewFamilyName(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleCreateFamily()}
+                    value={family.newFamilyName}
+                    onChange={(e) => family.setNewFamilyName(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && family.handleCreateFamily()}
                     className="flex-1"
                   />
-                  <ui.Button onClick={handleCreateFamily} disabled={!newFamilyName.trim()}>
+                  <ui.Button onClick={family.handleCreateFamily} disabled={!family.newFamilyName.trim()}>
                     <Icon.Plus className="h-4 w-4 mr-2" />
                     Create Family
                   </ui.Button>
@@ -181,15 +119,15 @@ export default function Families() {
             </ui.Card>
 
             {/* Families Grid */}
-            {!hasFamilies ? (
-              <dashboardComponent.EmptyBlock
+            {!family.hasFamilies ? (
+              <d.EmptyBlock
                 heading="No families created"
                 description="Create a family above and drag characters and locations into it."
               />
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                {familyStore.families.map((family) => (
-                  <dashboardComponent.FamilyBox key={family.id} family={family} />
+                {f.map((family) => (
+                  <d.FamilyBox key={family.id} family={family} />
                 ))}
               </div>
             )}
@@ -199,26 +137,26 @@ export default function Families() {
 
       {/* Drag Overlay */}
       <DragOverlay>
-        {activeItem?.type === "character" && (
+        {family.activeItem?.type === "character" && (
           <div
             className={`flex items-center gap-2 p-2 rounded-lg border shadow-lg ${
-              (activeItem.data as Character).gender === "Male"
+              (family.activeItem.data as Character).gender === "Male"
                 ? "bg-blue-50 border-blue-300"
                 : "bg-pink-50 border-pink-300"
             }`}
           >
             <Icon.Users className="h-3 w-3" />
             <span className="text-sm font-medium">
-              {(activeItem.data as Character).firstName}{" "}
-              {(activeItem.data as Character).lastName}
+              {(family.activeItem.data as Character).firstName}{" "}
+              {(family.activeItem.data as Character).lastName}
             </span>
           </div>
         )}
-        {activeItem?.type === "location" && (
+        {family.activeItem?.type === "location" && (
           <div className="flex items-center gap-2 p-2 rounded-lg border shadow-lg bg-emerald-50 border-emerald-300">
             <Icon.MapPin className="h-3 w-3" />
             <span className="text-sm font-medium">
-              {(activeItem.data as Location).address}
+              {(family.activeItem.data as Location).address}
             </span>
           </div>
         )}
